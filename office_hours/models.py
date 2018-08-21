@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class TeachingAssistant(models.Model):
@@ -42,6 +43,11 @@ class OfficeHour(models.Model):
 class OfficeHourSession(models.Model):
     office_hour = models.ForeignKey(OfficeHour, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
+
+    @property
+    def ongoing(self):
+        now = timezone.localtime().time()
+        return self.office_hour.start <= now < self.office_hour.end
 
     def __str__(self):
         return f"{self.office_hour.teaching_assistant.name}'s office hours held on {self.date}"

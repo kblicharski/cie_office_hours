@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>CIE Office Hours Queue</h1>
+  {% if ongoing_office_hours %}
+    <h2 style="color: green">There are ongoing office hours.</h2>
+  {% endif %}
+  {% if not ongoing_office_hours %}
+    <h2 style="color: red">No ongoing office hours. Please check back later.</h2>
+  {% endif %}
+{% endblock %}
