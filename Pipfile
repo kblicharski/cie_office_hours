@@ -12,6 +12,8 @@ celery = "*"
 isort = "*"
 "flake8" = "*"
 pytest-django = "*"
+freezegun = "*"
+factory-boy = "*"
 
 [requires]
 python_version = "3.6"
