@@ -46,8 +46,10 @@ class OfficeHourSession(models.Model):
 
     @property
     def ongoing(self):
-        now = timezone.localtime().time()
-        return self.office_hour.start <= now < self.office_hour.end
+        now = timezone.localtime()
+        if now.date() != self.date:
+            return False
+        return self.office_hour.start <= now.time() < self.office_hour.end
 
     def __str__(self):
         return f"{self.office_hour.teaching_assistant.name}'s office hours held on {self.date}"
@@ -56,6 +58,10 @@ class OfficeHourSession(models.Model):
 class StudentQueue(models.Model):
     locked = models.BooleanField(default=False)
     office_hour_session = models.ForeignKey(OfficeHourSession, on_delete=models.CASCADE)
+
+    @property
+    def size(self):
+        return self.student_set.filter(addressed=False).count()
 
     def __str__(self):
         return f"Queue of students for {str(self.office_hour_session)}"
