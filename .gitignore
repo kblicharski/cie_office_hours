@@ -1,0 +1,6 @@
+**__pycache__**
+**secrets.py**
+.idea
+.DS_Store
+db.sqlite3
+.pytest_cache
