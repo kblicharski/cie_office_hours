@@ -42,15 +42,22 @@ class OfficeHour(models.Model):
 
 class OfficeHourSession(models.Model):
     office_hour = models.ForeignKey(OfficeHour, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)
+    # We can't use autoaddnow because Celery refuses to use the right timezone
+    # Instead we have to overrride save() and add it manually
+    date = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.office_hour.teaching_assistant.name}'s office hours held on {self.date}"
+
+    def save(self, *args, **kwargs):
+        if not self.date:
+            self.date = timezone.localtime(timezone.now())
+        super().save(*args, **kwargs)
 
     @property
     def ongoing(self):
         now = timezone.localtime()
         return self.office_hour.start <= now < self.office_hour.end
-
-    def __str__(self):
-        return f"{self.office_hour.teaching_assistant.name}'s office hours held on {self.date}"
 
 
 class StudentQueue(models.Model):

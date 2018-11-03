@@ -6,7 +6,7 @@ from .models import OfficeHourSession
 
 # Create your views here.
 def index(request):
-    todays_sessions = OfficeHourSession.objects.filter(date=timezone.localdate())
+    todays_sessions = OfficeHourSession.objects.filter(date=timezone.localtime())
 
     ongoing = False
     for session in todays_sessions:
